@@ -3,9 +3,8 @@ import { config } from '@/config/config'
 import { logger } from '@/shared/infrastructure/logging/logger'
 import { pinoLogger } from '@/shared/presentation/middlewares/logger-middleware'
 import { errorHandler } from '@/shared/presentation/middlewares/error-handler'
-import { HealthController } from '@/modules/health/presentation/health-controller'
-import { WelcomeController } from '@/modules/welcome/presentation/welcome-controller'
 import { NotFoundError } from '@/shared/domain/errors/app-error'
+import healthRouter from './modules/health/presentation'
 
 const app = new Hono()
 
@@ -13,8 +12,7 @@ const app = new Hono()
 app.use(pinoLogger())
 
 // Routes
-app.get('/', WelcomeController.getWelcome)
-app.get('/health', HealthController.getHealth)
+app.route('/health', healthRouter)
 
 // Error Handling
 app.onError(errorHandler)
